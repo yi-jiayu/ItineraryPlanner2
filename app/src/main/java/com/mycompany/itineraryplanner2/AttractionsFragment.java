@@ -3,9 +3,16 @@ package com.mycompany.itineraryplanner2;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * A fragment representing a list of Items.
@@ -27,6 +34,8 @@ public class AttractionsFragment extends ListFragment {
 
     private OnFragmentInteractionListener mListener;
 
+    HashSet<String> checkedAttractions = new HashSet<>();
+
     // TODO: Rename and change types of parameters
     public static AttractionsFragment newInstance(String param1, String param2) {
         AttractionsFragment fragment = new AttractionsFragment();
@@ -45,6 +54,13 @@ public class AttractionsFragment extends ListFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(android.R.layout.list_content, container, false);
+        ((ListView) root.findViewById(android.R.id.list)).setSelector(android.R.color.transparent);
+        return root;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -53,7 +69,6 @@ public class AttractionsFragment extends ListFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // TODO: Change Adapter to display your content
         setListAdapter(new ArrayAdapter<>(getActivity(),
                 R.layout.attraction, R.id.text1, Data.attractions));
     }
@@ -78,13 +93,22 @@ public class AttractionsFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+        Log.i("AttractionsFragment", "List item click");
 
-//        if (null != mListener) {
-//            // Notify the active callbacks interface (the activity, if the
-//            // fragment is attached to one) that an item has been selected.
-//            mListener.onAttractionsSelected(DummyContent.ITEMS.get(position).id);
-//        }
+        if (null != mListener) {
+            String attraction = Data.attractions.get(position);
+            CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox);
+            if (!checkBox.isChecked()) {
+                checkedAttractions.add(attraction);
+            } else {
+                checkedAttractions.remove(attraction);
+            }
+            checkBox.toggle();
+
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+            mListener.onAttractionsSelected(new ArrayList<>(checkedAttractions));
+        }
     }
 
     /**
@@ -98,8 +122,7 @@ public class AttractionsFragment extends ListFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onAttractionsSelected(String id);
+        void onAttractionsSelected(ArrayList<String> selectedAttractions);
     }
 
 }

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
      */
     private ViewPager mViewPager;
 
-    HashSet<String> checkedAttractions = new HashSet<>();
+    ArrayList<String> checkedAttractions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,34 +103,23 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
     }
 
     @Override
-    public void onAttractionsSelected(String id) {
+    public void onAttractionsSelected(ArrayList<String> selectedAttractions) {
+        this.checkedAttractions = selectedAttractions;
 
+        mSectionsPagerAdapter.notifyDataSetChanged();
+
+        String checkedAttractionsString = "";
+        for (String selectedAttraction :
+                selectedAttractions) {
+            checkedAttractionsString += " " + selectedAttraction;
+        }
+//        Toast.makeText(this, checkedAttractionsString, Toast.LENGTH_SHORT).show();
+        Log.i("AttractionsFragment", checkedAttractionsString);
     }
 
     @Override
     public void onFragmentInteraction(String id) {
 
-    }
-
-    public void selectAttraction(View view) {
-        String attraction = ((TextView) view.findViewById(R.id.text1)).getText().toString();
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-        if (!checkBox.isChecked()) {
-            checkedAttractions.add(attraction);
-        } else {
-            checkedAttractions.remove(attraction);
-        }
-        checkBox.toggle();
-
-        mSectionsPagerAdapter.notifyDataSetChanged();
-
-        String checkedAttractionsString = "";
-        for (String checkedAttraction :
-                checkedAttractions) {
-            checkedAttractionsString += " " + checkedAttraction;
-        }
-//        Toast.makeText(this, checkedAttractionsString, Toast.LENGTH_SHORT).show();
-        Log.i("AttractionsFragment", checkedAttractionsString);
     }
 
 
@@ -167,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
                 case 1:
                     return AttractionsFragment.newInstance("", "");
                 case 2:
-                    return ItineraryFragment.newInstance(new ArrayList<>(checkedAttractions));
+                    return ItineraryFragment.newInstance(checkedAttractions);
                 default:
                 // Return a PlaceholderFragment (defined as a static inner class below).
                 return PlaceholderFragment.newInstance(position + 1);
