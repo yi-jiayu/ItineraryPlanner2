@@ -55,9 +55,9 @@ public class AttractionsFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(android.R.layout.list_content, container, false);
-        ((ListView) root.findViewById(android.R.id.list)).setSelector(android.R.color.transparent);
-        return root;
+        View listView = inflater.inflate(android.R.layout.list_content, container, false);
+        ((ListView) listView.findViewById(android.R.id.list)).setSelector(android.R.color.transparent);
+        return listView;
     }
 
     @Override

@@ -1,9 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mycompany.itineraryplanner2.BudgetFragment">
+    tools:context="com.mycompany.itineraryplanner2.BudgetFragment" >
 
-    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -25,11 +29,12 @@
         android:ems="10"
         android:id="@+id/editText"
         android:hint="Budget"
-        android:imeOptions="actionDone"/>
+        android:imeOptions="actionNext"
+        android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
-    <!--<android.support.design.widget.TextInputLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/view2"
@@ -48,7 +53,52 @@
         android:id="@+id/editText2"
         android:layout_below="@+id/view"
         android:layout_toEndOf="@+id/view2"
-        android:hint="Hotel location"/>
-    </android.support.design.widget.TextInputLayout>-->
+        android:hint="Hotel location"
+        android:imeOptions="actionGo"
+        android:singleLine="true" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search Mode"
+        android:id="@+id/textView"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:layout_below="@+id/view2"
+        android:layout_alignParentStart="true" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="start"
+        android:id="@+id/radioGroup"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:checkedButton="@+id/radioButton" >
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Approximate"
+            android:id="@+id/radioButton"
+            android:checked="false"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Exhaustive"
+            android:id="@+id/radioButton2"
+            android:checked="false"
+            android:layout_weight="1" />
+    </RadioGroup>
+
 
 </RelativeLayout>

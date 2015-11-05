@@ -31,9 +31,10 @@ public class ItineraryFragment extends ListFragment {
     private OnFragmentInteractionListener mListener;
 
     // TODO: Rename and change types of parameters
-    public static ItineraryFragment newInstance(ArrayList<String> toVisit) {
+    public static ItineraryFragment newInstance(int budget, ArrayList<String> toVisit) {
         ItineraryFragment fragment = new ItineraryFragment();
         Bundle args = new Bundle();
+        args.putInt("budget", budget);
         args.putStringArrayList("toVisit", toVisit);
         fragment.setArguments(args);
         return fragment;

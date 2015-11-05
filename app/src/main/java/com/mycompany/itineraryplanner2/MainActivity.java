@@ -1,9 +1,9 @@
 package com.mycompany.itineraryplanner2;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,12 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.CheckBox;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity implements BudgetFragment.OnFragmentInteractionListener, AttractionsFragment.OnFragmentInteractionListener, ItineraryFragment.OnFragmentInteractionListener {
 
@@ -44,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
     private ViewPager mViewPager;
 
     ArrayList<String> checkedAttractions = new ArrayList<>();
+    int budget;
+    String hotel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,19 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
     }
 
     @Override
-    public void onBudgetUpdated(int budget) {
+    public void onBudgetUpdated(int budget, String hotel) {
+        Toast.makeText(this, String.valueOf(budget), Toast.LENGTH_SHORT).show();
 
+        this.budget = budget;
+        this.hotel = hotel;
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        ((ViewPager) findViewById(R.id.container)).setCurrentItem(1);
     }
 
     @Override
@@ -108,13 +120,13 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
 
         mSectionsPagerAdapter.notifyDataSetChanged();
 
-        String checkedAttractionsString = "";
-        for (String selectedAttraction :
-                selectedAttractions) {
-            checkedAttractionsString += " " + selectedAttraction;
-        }
-//        Toast.makeText(this, checkedAttractionsString, Toast.LENGTH_SHORT).show();
-        Log.i("AttractionsFragment", checkedAttractionsString);
+//        String checkedAttractionsString = "";
+//        for (String selectedAttraction :
+//                selectedAttractions) {
+//            checkedAttractionsString += " " + selectedAttraction;
+//        }
+////        Toast.makeText(this, checkedAttractionsString, Toast.LENGTH_SHORT).show();
+//        Log.i("AttractionsFragment", checkedAttractionsString);
     }
 
     @Override
@@ -156,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
                 case 1:
                     return AttractionsFragment.newInstance("", "");
                 case 2:
-                    return ItineraryFragment.newInstance(checkedAttractions);
+                    return ItineraryFragment.newInstance(budget, checkedAttractions);
                 default:
                 // Return a PlaceholderFragment (defined as a static inner class below).
                 return PlaceholderFragment.newInstance(position + 1);

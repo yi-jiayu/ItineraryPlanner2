@@ -1,0 +1,404 @@
+{
+    "taxi": {
+        "marina_bay_sands": {
+            "singapore_flyer": {
+                "cost": 322,
+                "timing": 3
+            },
+            "vivo_city": {
+                "cost": 696,
+                "timing": 14
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 850,
+                "timing": 14
+            },
+            "resorts_world_sentosa": {
+                "cost": 498,
+                "timing": 8
+            },
+            "zoo": {
+                "cost": 1840,
+                "timing": 30
+            }
+        },
+        "singapore_flyer": {
+            "marina_bay_sands": {
+                "cost": 432,
+                "timing": 6
+            },
+            "vivo_city": {
+                "cost": 784,
+                "timing": 13
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 938,
+                "timing": 14
+            },
+            "resorts_world_sentosa": {
+                "cost": 476,
+                "timing": 8
+            },
+            "zoo": {
+                "cost": 1818,
+                "timing": 29
+            }
+        },
+        "vivo_city": {
+            "marina_bay_sands": {
+                "cost": 830,
+                "timing": 12
+            },
+            "singapore_flyer": {
+                "cost": 786,
+                "timing": 14
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 454,
+                "timing": 9
+            },
+            "resorts_world_sentosa": {
+                "cost": 642,
+                "timing": 11
+            },
+            "zoo": {
+                "cost": 2258,
+                "timing": 31
+            }
+        },
+        "buddha_tooth_relic_temple": {
+            "marina_bay_sands": {
+                "cost": 874,
+                "timing": 13
+            },
+            "singapore_flyer": {
+                "cost": 840,
+                "timing": 14
+            },
+            "vivo_city": {
+                "cost": 322,
+                "timing": 4
+            },
+            "resorts_world_sentosa": {
+                "cost": 664,
+                "timing": 12
+            },
+            "zoo": {
+                "cost": 2280,
+                "timing": 32
+            }
+        },
+        "resorts_world_sentosa": {
+            "marina_bay_sands": {
+                "cost": 532,
+                "timing": 7
+            },
+            "singapore_flyer": {
+                "cost": 476,
+                "timing": 8
+            },
+            "vivo_city": {
+                "cost": 498,
+                "timing": 9
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 652,
+                "timing": 14
+            },
+            "zoo": {
+                "cost": 1840,
+                "timing": 30
+            }
+        },
+        "zoo": {
+            "marina_bay_sands": {
+                "cost": 2248,
+                "timing": 32
+            },
+            "singapore_flyer": {
+                "cost": 1940,
+                "timing": 29
+            },
+            "vivo_city": {
+                "cost": 2148,
+                "timing": 32
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 2368,
+                "timing": 36
+            },
+            "resorts_world_sentosa": {
+                "cost": 2160,
+                "timing": 30
+            }
+        }
+    },
+    "pt": {
+        "marina_bay_sands": {
+            "singapore_flyer": {
+                "cost": 83,
+                "timing": 17
+            },
+            "vivo_city": {
+                "cost": 118,
+                "timing": 26
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 403,
+                "timing": 35
+            },
+            "resorts_world_sentosa": {
+                "cost": 88,
+                "timing": 19
+            },
+            "zoo": {
+                "cost": 196,
+                "timing": 84
+            }
+        },
+        "singapore_flyer": {
+            "marina_bay_sands": {
+                "cost": 83,
+                "timing": 17
+            },
+            "vivo_city": {
+                "cost": 126,
+                "timing": 31
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 403,
+                "timing": 38
+            },
+            "resorts_world_sentosa": {
+                "cost": 98,
+                "timing": 24
+            },
+            "zoo": {
+                "cost": 189,
+                "timing": 85
+            }
+        },
+        "vivo_city": {
+            "marina_bay_sands": {
+                "cost": 118,
+                "timing": 24
+            },
+            "singapore_flyer": {
+                "cost": 126,
+                "timing": 29
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 200,
+                "timing": 10
+            },
+            "resorts_world_sentosa": {
+                "cost": 98,
+                "timing": 18
+            },
+            "zoo": {
+                "cost": 199,
+                "timing": 85
+            }
+        },
+        "buddha_tooth_relic_temple": {
+            "marina_bay_sands": {
+                "cost": 188,
+                "timing": 33
+            },
+            "singapore_flyer": {
+                "cost": 126,
+                "timing": 29
+            },
+            "vivo_city": {
+                "cost": 0,
+                "timing": 10
+            },
+            "resorts_world_sentosa": {
+                "cost": 98,
+                "timing": 27
+            },
+            "zoo": {
+                "cost": 199,
+                "timing": 92
+            }
+        },
+        "resorts_world_sentosa": {
+            "marina_bay_sands": {
+                "cost": 88,
+                "timing": 18
+            },
+            "singapore_flyer": {
+                "cost": 98,
+                "timing": 23
+            },
+            "vivo_city": {
+                "cost": 98,
+                "timing": 19
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 398,
+                "timing": 28
+            },
+            "zoo": {
+                "cost": 191,
+                "timing": 83
+            }
+        },
+        "zoo": {
+            "marina_bay_sands": {
+                "cost": 188,
+                "timing": 86
+            },
+            "singapore_flyer": {
+                "cost": 196,
+                "timing": 87
+            },
+            "vivo_city": {
+                "cost": 211,
+                "timing": 86
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 499,
+                "timing": 96
+            },
+            "resorts_world_sentosa": {
+                "cost": 191,
+                "timing": 84
+            }
+        }
+    },
+    "foot": {
+        "marina_bay_sands": {
+            "singapore_flyer": {
+                "cost": 0,
+                "timing": 14
+            },
+            "vivo_city": {
+                "cost": 0,
+                "timing": 69
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 0,
+                "timing": 76
+            },
+            "resorts_world_sentosa": {
+                "cost": 0,
+                "timing": 28
+            },
+            "zoo": {
+                "cost": 0,
+                "timing": 269
+            }
+        },
+        "singapore_flyer": {
+            "marina_bay_sands": {
+                "cost": 0,
+                "timing": 14
+            },
+            "vivo_city": {
+                "cost": 0,
+                "timing": 81
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 0,
+                "timing": 188
+            },
+            "resorts_world_sentosa": {
+                "cost": 0,
+                "timing": 39
+            },
+            "zoo": {
+                "cost": 0,
+                "timing": 264
+            }
+        },
+        "vivo_city": {
+            "marina_bay_sands": {
+                "cost": 0,
+                "timing": 69
+            },
+            "singapore_flyer": {
+                "cost": 0,
+                "timing": 81
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 0,
+                "timing": 12
+            },
+            "resorts_world_sentosa": {
+                "cost": 0,
+                "timing": 47
+            },
+            "zoo": {
+                "cost": 0,
+                "timing": 270
+            }
+        },
+        "buddha_tooth_relic_temple": {
+            "marina_bay_sands": {
+                "cost": 0,
+                "timing": 76
+            },
+            "singapore_flyer": {
+                "cost": 0,
+                "timing": 88
+            },
+            "vivo_city": {
+                "cost": 0,
+                "timing": 12
+            },
+            "resorts_world_sentosa": {
+                "cost": 0,
+                "timing": 55
+            },
+            "zoo": {
+                "cost": 0,
+                "timing": 285
+            }
+        },
+        "resorts_world_sentosa": {
+            "marina_bay_sands": {
+                "cost": 0,
+                "timing": 28
+            },
+            "singapore_flyer": {
+                "cost": 0,
+                "timing": 39
+            },
+            "vivo_city": {
+                "cost": 0,
+                "timing": 47
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 0,
+                "timing": 55
+            },
+            "zoo": {
+                "cost": 0,
+                "timing": 264
+            }
+        },
+        "zoo": {
+            "marina_bay_sands": {
+                "cost": 0,
+                "timing": 269
+            },
+            "singapore_flyer": {
+                "cost": 0,
+                "timing": 264
+            },
+            "vivo_city": {
+                "cost": 0,
+                "timing": 270
+            },
+            "buddha_tooth_relic_temple": {
+                "cost": 0,
+                "timing": 285
+            },
+            "resorts_world_sentosa": {
+                "cost": 0,
+                "timing": 264
+            }
+        }
+    }
+}

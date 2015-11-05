@@ -29,8 +29,8 @@ public class BudgetFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static final String[] COUNTRIES = new String[] {
-            "Belgium", "France", "Italy", "Germany", "Spain"
+    private static final String[] COUNTRIES = {
+            "Marina Bay Sands", "Resorts World Sentosa", "Singapore Flyer", "Vivo City", "Buddha Tooth Relic Temple", "Zoo"
     };
 
     // TODO: Rename and change types of parameters
@@ -78,24 +78,26 @@ public class BudgetFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
 
         final EditText editText = (EditText) view.findViewById(R.id.editText);
+        final EditText editText2 = (EditText) view.findViewById(R.id.editText2);
 
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        editText2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    mListener.onBudgetUpdated(Integer.parseInt(editText.getText().toString()));
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    mListener.onBudgetUpdated(Integer.parseInt(editText.getText().toString()),
+                            editText2.getText().toString());
                     handled = true;
                 }
                 return handled;
             }
         });
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
-//                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-//        AutoCompleteTextView textView = (AutoCompleteTextView)
-//                view.findViewById(R.id.editText2);
-//        textView.setAdapter(adapter);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
+                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+        AutoCompleteTextView textView = (AutoCompleteTextView)
+                view.findViewById(R.id.editText2);
+        textView.setAdapter(adapter);
 
 
         return view;
@@ -138,7 +140,7 @@ public class BudgetFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onBudgetUpdated(int budget);
+        public void onBudgetUpdated(int budget, String hotel);
     }
 
 }
