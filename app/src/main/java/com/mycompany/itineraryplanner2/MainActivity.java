@@ -1,31 +1,35 @@
 package com.mycompany.itineraryplanner2;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements BudgetFragment.OnFragmentInteractionListener, AttractionsFragment.OnFragmentInteractionListener, ItineraryFragment.OnFragmentInteractionListener {
+public class MainActivity
+        extends AppCompatActivity
+        implements BudgetFragment.OnFragmentInteractionListener,
+        AttractionsFragment.OnFragmentInteractionListener,
+        ItineraryFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -73,6 +77,12 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
             }
         });
 
+        try (InputStream fileInputStream = getResources().openRawResource(R.raw.attractions)) {
+            Routes.generateRoutes(fileInputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -107,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
 
         View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
@@ -170,8 +180,8 @@ public class MainActivity extends AppCompatActivity implements BudgetFragment.On
                 case 2:
                     return ItineraryFragment.newInstance(budget, checkedAttractions);
                 default:
-                // Return a PlaceholderFragment (defined as a static inner class below).
-                return PlaceholderFragment.newInstance(position + 1);
+                    // Return a PlaceholderFragment (defined as a static inner class below).
+                    return PlaceholderFragment.newInstance(position + 1);
             }
         }
 
