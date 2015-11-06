@@ -3,13 +3,11 @@ package com.mycompany.itineraryplanner2;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.mycompany.itineraryplanner2.dummy.DummyContent;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -30,12 +28,16 @@ public class ItineraryFragment extends ListFragment {
 
     private OnFragmentInteractionListener mListener;
 
+    int budget;
+    boolean exhaustiveMode;
+
     // TODO: Rename and change types of parameters
-    public static ItineraryFragment newInstance(int budget, ArrayList<String> toVisit) {
+    public static ItineraryFragment newInstance(int budget, ArrayList<String> toVisit, boolean exhaustiveMode) {
         ItineraryFragment fragment = new ItineraryFragment();
         Bundle args = new Bundle();
         args.putInt("budget", budget);
         args.putStringArrayList("toVisit", toVisit);
+        args.putBoolean("exhaustiveMode", exhaustiveMode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +54,20 @@ public class ItineraryFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
+            budget = getArguments().getInt("budget");
+            Log.i("budget", String.valueOf(budget));
+            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
             ArrayList<String> attractionsToVisit = getArguments().getStringArrayList("toVisit");
+            Log.i("attractions to visit", attractionsToVisit.toString());
+            if (!attractionsToVisit.isEmpty()) {
+                ArrayList<String> itinerary = new OptimalRouteFinder(budget, "Resorts World Sentosa", attractionsToVisit).findOptimalRoute();
+                Log.i("OptimalRoute", itinerary.toString());
+            }
+//            if (!attractionsToVisit.isEmpty()) {
+//                itinerary = new OptimalRouteFinder(budget, "Resorts World Sentosa", attractionsToVisit).findOptimalRoute();
+//            } else {
+//                itinerary = attractionsToVisit;
+//            }
             setListAdapter(new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1, android.R.id.text1, attractionsToVisit));
         }
@@ -102,5 +117,75 @@ public class ItineraryFragment extends ListFragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
+
+    class OptimalRouteFinder {
+        class CandidateSolution {
+            ArrayList<String> pathTaken = new ArrayList<>();
+            int total_time = Integer.MAX_VALUE;
+            int total_cost = Integer.MAX_VALUE;
+        }
+
+        int budget;
+        String hotel;
+        ArrayList<String> destinations;
+        CandidateSolution candidateSolution;
+
+        public OptimalRouteFinder(int budget, String hotel, ArrayList<String> destinations) {
+            this.budget = budget;
+            this.hotel = hotel;
+            this.destinations = destinations;
+            candidateSolution = new CandidateSolution();
+        }
+
+        ArrayList<String> findOptimalRoute() {
+            tracePath(hotel, 0, 0, new ArrayList<>(destinations), new ArrayList<String>());
+            return candidateSolution.pathTaken;
+        }
+
+        void tracePath(String currentLocation, int currentTiming, int currentCost,
+                       ArrayList<String> remainingDestinations,
+                       ArrayList<String> pathTaken) {
+
+            Log.i("candidatesln", String.valueOf(this.candidateSolution.total_time));
+            Log.i("currenttiming", String.valueOf(currentTiming));
+//            if (currentCost > budget || currentTiming > this.candidateSolution.total_time) {
+//                return;
+//            }
+
+            Log.i("remainingDestinations", String.valueOf(remainingDestinations.isEmpty()));
+            if (remainingDestinations.isEmpty()) {
+                Log.i("HELO", "hi");
+                for (TransportMode transportMode : TransportMode.values()) {
+                    Log.i("transportMode", transportMode.toString());
+                    int finalCost = currentCost += Routes.getCost(transportMode, currentLocation, hotel);
+                    if (finalCost <= budget) {
+                        int finalTiming = currentTiming += Routes.getTiming(transportMode, currentLocation, hotel);
+                        if (finalTiming < candidateSolution.total_time) {
+                            candidateSolution.total_cost = finalCost;
+                            candidateSolution.total_time = finalTiming;
+                            pathTaken.add(hotel);
+                            candidateSolution.pathTaken = pathTaken;
+                            Log.i("FinalPathTaken", candidateSolution.pathTaken.toString());
+                        }
+                    }
+                }
+            } else {
+                for (TransportMode transportMode : TransportMode.values()) {
+                    for (String destination : remainingDestinations) {
+                        ArrayList<String> r = new ArrayList<>(remainingDestinations);
+                        r.remove(destination);
+                        ArrayList<String> p = new ArrayList<>(pathTaken);
+                        p.add(destination);
+                        tracePath(destination,
+                                currentTiming += Routes.getTiming(transportMode, currentLocation, destination),
+                                currentCost += Routes.getCost(transportMode, currentLocation, destination),
+                                r,
+                                p);
+                    }
+                }
+            }
+        }
+    }
+
 
 }

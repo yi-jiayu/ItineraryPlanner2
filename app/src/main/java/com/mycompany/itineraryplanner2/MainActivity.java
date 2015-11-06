@@ -49,6 +49,7 @@ public class MainActivity
     ArrayList<String> checkedAttractions = new ArrayList<>();
     int budget;
     String hotel;
+    boolean itineraryExhaustiveEnumeration = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +179,8 @@ public class MainActivity
                 case 1:
                     return AttractionsFragment.newInstance("", "");
                 case 2:
-                    return ItineraryFragment.newInstance(budget, checkedAttractions);
+                    Log.i("MyActivity", "getItem is called for ItineraryFragment");
+                    return ItineraryFragment.newInstance(budget, checkedAttractions, itineraryExhaustiveEnumeration);
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);

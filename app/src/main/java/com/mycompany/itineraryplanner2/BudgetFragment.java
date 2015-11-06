@@ -1,7 +1,6 @@
 package com.mycompany.itineraryplanner2;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -95,9 +94,7 @@ public class BudgetFragment extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-        AutoCompleteTextView textView = (AutoCompleteTextView)
-                view.findViewById(R.id.editText2);
-        textView.setAdapter(adapter);
+        ((AutoCompleteTextView) editText2).setAdapter(adapter);
 
 
         return view;

@@ -1,18 +1,24 @@
 package com.mycompany.itineraryplanner2;
 
 import android.util.JsonReader;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-/**
- * Created by Jiayu on 06/11/2015.
- */
 public class Routes {
     static HashMap<RouteInfoKey, RouteInfo> routes = new HashMap<>();
+
+    static int getCost(TransportMode transportMode, String origin, String destination) {
+//        Log.i("getCost", transportMode + origin + destination);
+        return Routes.routes.get(new RouteInfoKey(transportMode, origin, destination)).cost;
+    }
+
+    static int getTiming(TransportMode transportMode, String origin, String destination) {
+//        Log.i("getTiming", transportMode + origin + destination);
+        return Routes.routes.get(new RouteInfoKey(transportMode, origin, destination)).time;
+    }
 
     static void generateRoutes(InputStream jsonInputStream) throws IOException {
         JsonReader jsonReader = new JsonReader(new InputStreamReader(jsonInputStream, "UTF-8"));
