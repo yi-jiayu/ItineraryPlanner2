@@ -28,7 +28,7 @@ public class BudgetFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static final String[] COUNTRIES = {
+    private static final String[] HOTELS = {
             "Marina Bay Sands", "Resorts World Sentosa", "Singapore Flyer", "Vivo City", "Buddha Tooth Relic Temple", "Zoo"
     };
 
@@ -93,7 +93,7 @@ public class BudgetFragment extends Fragment {
         });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
-                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+                android.R.layout.simple_dropdown_item_1line, HOTELS);
         ((AutoCompleteTextView) editText2).setAdapter(adapter);
 
 

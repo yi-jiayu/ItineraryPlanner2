@@ -55,9 +55,14 @@ public class AttractionsFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View listView = inflater.inflate(android.R.layout.list_content, container, false);
-        ((ListView) listView.findViewById(android.R.id.list)).setSelector(android.R.color.transparent);
-        return listView;
+        View listLayout = inflater.inflate(android.R.layout.list_content, container, false);
+        ListView listView = (ListView) listLayout.findViewById(android.R.id.list);
+//        listView.setPadding(0, 8, 0, 0);
+//        ((FrameLayout) listView.getParent()).setPadding(0, 8, 0, 0);
+        listView.setSelector(android.R.color.transparent);
+//        listView.setDivider(null);
+//        listView.setDividerHeight(0);
+        return listLayout;
     }
 
     @Override
@@ -71,6 +76,8 @@ public class AttractionsFragment extends ListFragment {
 
         setListAdapter(new ArrayAdapter<>(getActivity(),
                 R.layout.attraction, R.id.text1, Data.attractions));
+//                R.layout.attraction_card, R.id.text1, Data.attractions));
+
     }
 
 

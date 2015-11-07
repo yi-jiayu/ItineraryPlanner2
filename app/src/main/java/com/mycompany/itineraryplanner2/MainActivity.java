@@ -2,8 +2,6 @@ package com.mycompany.itineraryplanner2;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,14 +66,14 @@ public class MainActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         try (InputStream fileInputStream = getResources().openRawResource(R.raw.attractions)) {
             Routes.generateRoutes(fileInputStream);
@@ -111,10 +108,12 @@ public class MainActivity
 
     @Override
     public void onBudgetUpdated(int budget, String hotel) {
-        Toast.makeText(this, String.valueOf(budget), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, String.valueOf(budget), Toast.LENGTH_SHORT).show();
 
         this.budget = budget;
         this.hotel = hotel;
+
+        mSectionsPagerAdapter.notifyDataSetChanged();
 
         View view = this.getCurrentFocus();
         if (view != null) {
