@@ -107,11 +107,12 @@ public class MainActivity
     }
 
     @Override
-    public void onBudgetUpdated(int budget, String hotel) {
+    public void onBudgetUpdated(int budget, String hotel, boolean exhaustiveMode) {
 //        Toast.makeText(this, String.valueOf(budget), Toast.LENGTH_SHORT).show();
 
         this.budget = budget;
         this.hotel = hotel;
+        this.itineraryExhaustiveEnumeration = exhaustiveMode;
 
         mSectionsPagerAdapter.notifyDataSetChanged();
 
@@ -135,7 +136,8 @@ public class MainActivity
 //                selectedAttractions) {
 //            checkedAttractionsString += " " + selectedAttraction;
 //        }
-////        Toast.makeText(this, checkedAttractionsString, Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(this, checkedAttractionsString, Toast.LENGTH_SHORT).show();
 //        Log.i("AttractionsFragment", checkedAttractionsString);
     }
 

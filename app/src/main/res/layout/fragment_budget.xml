@@ -3,12 +3,6 @@
     android:layout_height="match_parent"
     tools:context="com.mycompany.itineraryplanner2.BudgetFragment" >
 
-    <LinearLayout
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,7 +80,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Approximate"
+            android:text="Exact"
             android:id="@+id/radioButton"
             android:checked="false"
             android:layout_weight="1" />
@@ -94,7 +88,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exhaustive"
+            android:text="Approximate"
             android:id="@+id/radioButton2"
             android:checked="false"
             android:layout_weight="1" />

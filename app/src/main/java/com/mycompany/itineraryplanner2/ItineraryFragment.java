@@ -153,6 +153,9 @@ public class ItineraryFragment extends ListFragment {
         }
 
         ArrayList<ItineraryItem> findApproximateRoute() {
+            if (destinations.isEmpty()) {
+                return new ArrayList<>();
+            }
             this.approximateMode = true;
             try {
                 tracePath(hotel, 0, 0, new ArrayList<>(destinations), new ArrayList<ItineraryItem>());

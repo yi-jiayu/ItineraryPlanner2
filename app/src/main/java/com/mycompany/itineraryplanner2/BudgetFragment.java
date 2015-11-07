@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
@@ -37,6 +38,9 @@ public class BudgetFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private EditText editText;
+    private EditText editText2;
+    private RadioGroup radioGroup;
 
     /**
      * Use this factory method to create a new instance of
@@ -76,21 +80,28 @@ public class BudgetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
 
-        final EditText editText = (EditText) view.findViewById(R.id.editText);
-        final EditText editText2 = (EditText) view.findViewById(R.id.editText2);
+        editText = (EditText) view.findViewById(R.id.editText);
+        editText2 = (EditText) view.findViewById(R.id.editText2);
+        radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
 
         editText2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_GO) {
-                    mListener.onBudgetUpdated(Integer.parseInt(editText.getText().toString()),
-                            editText2.getText().toString());
+                    updateRouteGenerator();
                     handled = true;
                 }
                 return handled;
             }
         });
+
+//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                updateRouteGenerator();
+//            }
+//        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_dropdown_item_1line, HOTELS);
@@ -99,6 +110,13 @@ public class BudgetFragment extends Fragment {
 
         return view;
 
+    }
+
+    private void updateRouteGenerator() {
+        int budget = Integer.parseInt(editText.getText().toString());
+        String hotel = editText2.getText().toString();
+        boolean exhaustiveMode = (radioGroup.getCheckedRadioButtonId() == R.id.radioButton);
+        mListener.onBudgetUpdated(budget, hotel, exhaustiveMode);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -137,7 +155,7 @@ public class BudgetFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onBudgetUpdated(int budget, String hotel);
+        public void onBudgetUpdated(int budget, String hotel, boolean exhaustiveMode);
     }
 
 }
