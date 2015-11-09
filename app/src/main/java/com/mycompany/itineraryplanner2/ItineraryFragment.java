@@ -31,8 +31,13 @@ public class ItineraryFragment extends ListFragment {
     private boolean exhaustiveMode;
 
 
-    public static ItineraryFragment newInstance() {
+    public static ItineraryFragment newInstance(int budget, String hotel, boolean exhaustiveMode) {
         ItineraryFragment fragment = new ItineraryFragment();
+        Bundle args = new Bundle();
+        args.putInt("budget", budget);
+        args.putString("hotel", hotel);
+        args.putBoolean("exhaustiveMode", exhaustiveMode);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -45,6 +50,12 @@ public class ItineraryFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        if (getArguments() != null) {
+            budget = getArguments().getInt("budget");
+            hotel = getArguments().getString("hotel");
+            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
+        }
 
         super.onCreate(savedInstanceState);
         destinations = new ArrayList<>();
@@ -174,6 +185,7 @@ public class ItineraryFragment extends ListFragment {
         }
 
         ArrayList<ItineraryItem> findRoute() {
+            Log.i("findRoute", String.valueOf(exhaustiveMode));
             // TODO: can be removed
             if (destinations.isEmpty()) {
                 return new ArrayList<>();

@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -62,11 +63,13 @@ public class BudgetFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, HOTELS);
         ((AutoCompleteTextView) editText2).setAdapter(adapter);
 
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    Log.i("BudgetFragment", "Budget updated");
                     int budget = Integer.parseInt(editText.getText().toString());
                     mListener.onBudgetUpdated(budget);
 //                    handled = true;
@@ -87,6 +90,8 @@ public class BudgetFragment extends Fragment {
                 return handled;
             }
         });
+
+        ((RadioButton) radioGroup.findViewById(R.id.radioButton)).setChecked(true);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

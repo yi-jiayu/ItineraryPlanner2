@@ -23,7 +23,7 @@
         android:ems="10"
         android:id="@+id/editText"
         android:hint="Budget"
-        android:imeOptions="actionDone|actionNext"
+        android:imeOptions="actionNext"
         android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
@@ -75,8 +75,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:checkedButton="@+id/radioButton" >
+        android:layout_alignParentLeft="true" >
 
         <RadioButton
             android:layout_width="match_parent"

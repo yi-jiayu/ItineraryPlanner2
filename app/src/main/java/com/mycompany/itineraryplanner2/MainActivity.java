@@ -46,9 +46,9 @@ public class MainActivity
     private ItineraryFragment itineraryFragment;
 
     ArrayList<String> checkedAttractions = new ArrayList<>();
-    int budget;
-    String hotel;
-    boolean itineraryExhaustiveEnumeration = true;
+    private int budget;
+    private String hotel;
+    private boolean itineraryExhaustiveEnumeration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +110,7 @@ public class MainActivity
 
     @Override
     public void onAttractionsSelected(ArrayList<String> selectedAttractions) {
+        Log.i("MainActivity", "Attraction selected");
         if (itineraryFragment != null) {
             itineraryFragment.updateItinerary(selectedAttractions);
         }
@@ -117,6 +118,8 @@ public class MainActivity
 
     @Override
     public void onBudgetUpdated(int budget) {
+        Log.i("MainActivity", "Budget updated: " + String.valueOf(budget));
+        this.budget = budget;
         if (itineraryFragment != null) {
             itineraryFragment.updateItinerary(budget);
         }
@@ -124,7 +127,8 @@ public class MainActivity
 
     @Override
     public void onHotelUpdated(String hotel) {
-        Log.i("MainActivity", "Hotel updated!");
+        Log.i("MainActivity", "Hotel updated to " + hotel);
+        this.hotel = hotel;
         if (attractionsFragment != null) {
             attractionsFragment.updateHotel(hotel);
         }
@@ -136,6 +140,8 @@ public class MainActivity
 
     @Override
     public void onSearchModeUpdated(boolean exhaustiveMode) {
+        Log.i("MainActivity", "Exhaustive mode set to " + String.valueOf(exhaustiveMode));
+        this.itineraryExhaustiveEnumeration = exhaustiveMode;
         if (itineraryFragment != null) {
             itineraryFragment.updateItinerary(exhaustiveMode);
         }
@@ -164,7 +170,7 @@ public class MainActivity
                 case 1:
                     return AttractionsFragment.newInstance();
                 case 2:
-                    return ItineraryFragment.newInstance();
+                    return ItineraryFragment.newInstance(budget, hotel, itineraryExhaustiveEnumeration);
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
