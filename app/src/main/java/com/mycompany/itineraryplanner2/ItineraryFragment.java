@@ -143,7 +143,7 @@ public class ItineraryFragment extends ListFragment {
     }
 
     public void updateItinerary(ArrayList<String> destinations) {
-        Log.i("ItineraryFragment", "Destinations updated");
+        Log.i("ItineraryFragment", "Destinations updated: " + destinations.toString());
         this.destinations = destinations;
         updateItinerary();
     }
@@ -185,14 +185,11 @@ public class ItineraryFragment extends ListFragment {
         }
 
         ArrayList<ItineraryItem> findRoute() {
-            Log.i("findRoute", String.valueOf(exhaustiveMode));
-            // TODO: can be removed
-            if (destinations.isEmpty()) {
-                return new ArrayList<>();
-            }
+            Log.i("findRoute", "Starting from " + hotel + ", exhaustiveMode: " + String.valueOf(exhaustiveMode));
             try {
                 tracePath(hotel, 0, 0, new ArrayList<>(destinations), new ArrayList<ItineraryItem>());
             } catch (InterruptedException e) {
+                Log.i("findRoute", "First optimal solution found.");
                 return candidateSolution.pathTaken;
             }
             return candidateSolution.pathTaken;
@@ -202,12 +199,9 @@ public class ItineraryFragment extends ListFragment {
                        ArrayList<String> remainingDestinations,
                        ArrayList<ItineraryItem> pathTaken) throws InterruptedException {
 
-            Log.i("current timing and cost", String.format("%d %d", currentTiming, currentCost));
+            Log.i("Current timing and cost", String.format("%d %d", currentTiming, currentCost));
 
             int recursionDepth = pathTaken.size();
-
-//            Log.i("candidatesln", String.valueOf(this.candidateSolution.total_time));
-//            Log.i("currenttiming", String.valueOf(currentTiming));
 
             if (currentCost > budget || currentTiming > this.candidateSolution.total_time) {
                 return;
@@ -237,9 +231,9 @@ public class ItineraryFragment extends ListFragment {
             } else {
                 for (TransportMode transportMode : TransportMode.values()) {
                     for (String destination : remainingDestinations) {
+                        Log.i("tracePath", String.format("%sVisited %s, now visiting %s by %s", new String(new char[recursionDepth * 4]).replace("\0", " "), pathTaken.toString(), destination, transportMode.toString()));
                         int cost = Routes.getCost(transportMode, currentLocation, destination);
                         int timing = Routes.getTiming(transportMode, currentLocation, destination);
-                        Log.i("tracePath", String.format("%sVisited %s, now visiting %s by %s", new String(new char[recursionDepth * 4]).replace("\0", " "), pathTaken.toString(), destination, transportMode.toString()));
                         ArrayList<String> r = new ArrayList<>(remainingDestinations);
                         r.remove(destination);
                         ArrayList<ItineraryItem> p = new ArrayList<>(pathTaken);

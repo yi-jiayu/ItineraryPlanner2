@@ -90,7 +90,7 @@ public class AttractionsFragment extends ListFragment {
         Log.i("AttractionsFragment", "List item click");
 
         if (null != mListener) {
-            String attraction = Data.attractions.get(position);
+            String attraction = attractionsAdapter.getItem(position);
             CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkBox);
             if (!checkBox.isChecked()) {
                 checkedAttractions.add(attraction);

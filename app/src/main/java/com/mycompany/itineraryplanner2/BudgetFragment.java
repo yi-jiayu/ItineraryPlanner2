@@ -9,11 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -25,7 +26,7 @@ import android.widget.TextView;
  * Use the {@link BudgetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BudgetFragment extends Fragment {
+public class BudgetFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private static final String[] HOTELS = {
             "Marina Bay Sands", "Resorts World Sentosa", "Singapore Flyer", "Vivo City", "Buddha Tooth Relic Temple", "Zoo"
     };
@@ -56,19 +57,20 @@ public class BudgetFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_budget, container, false);
 
         editText = (EditText) view.findViewById(R.id.editText);
-        editText2 = (EditText) view.findViewById(R.id.editText2);
+        Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
-                android.R.layout.simple_dropdown_item_1line, HOTELS);
-        ((AutoCompleteTextView) editText2).setAdapter(adapter);
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Data.attractions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     Log.i("BudgetFragment", "Budget updated");
                     int budget = Integer.parseInt(editText.getText().toString());
                     mListener.onBudgetUpdated(budget);
@@ -78,7 +80,9 @@ public class BudgetFragment extends Fragment {
             }
         });
 
-        editText2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+
+/*        editText2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
@@ -89,7 +93,7 @@ public class BudgetFragment extends Fragment {
                 }
                 return handled;
             }
-        });
+        });*/
 
         ((RadioButton) radioGroup.findViewById(R.id.radioButton)).setChecked(true);
 
@@ -119,6 +123,16 @@ public class BudgetFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mListener.onHotelUpdated((String) parent.getItemAtPosition(position));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     /**
