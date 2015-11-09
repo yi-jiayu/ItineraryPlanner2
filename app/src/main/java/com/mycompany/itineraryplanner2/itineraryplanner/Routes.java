@@ -1,4 +1,4 @@
-package com.mycompany.itineraryplanner2;
+package com.mycompany.itineraryplanner2.itineraryplanner;
 
 import android.util.JsonReader;
 

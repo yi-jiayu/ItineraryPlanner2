@@ -1,4 +1,4 @@
-package com.mycompany.itineraryplanner2;
+package com.mycompany.itineraryplanner2.itineraryplanner;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.mycompany.itineraryplanner2.R;
 
 
 /**

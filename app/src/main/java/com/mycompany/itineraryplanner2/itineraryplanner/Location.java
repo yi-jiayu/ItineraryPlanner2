@@ -1,4 +1,4 @@
-package com.mycompany.itineraryplanner2;
+package com.mycompany.itineraryplanner2.itineraryplanner;
 
 /**
  * Created by Jiayu on 05/11/2015.

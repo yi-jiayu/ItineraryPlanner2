@@ -1,4 +1,4 @@
-package com.mycompany.itineraryplanner2;
+package com.mycompany.itineraryplanner2.itineraryplanner;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.mycompany.itineraryplanner2.R;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.mycompany.itineraryplanner2;
+package com.mycompany.itineraryplanner2.itineraryplanner;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.mycompany.itineraryplanner2.R;
 
 import java.io.IOException;
 import java.io.InputStream;
