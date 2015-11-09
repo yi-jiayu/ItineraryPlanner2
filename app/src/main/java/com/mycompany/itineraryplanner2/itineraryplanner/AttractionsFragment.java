@@ -112,6 +112,7 @@ public class AttractionsFragment extends ListFragment {
         if (previousHotel != null) {
             attractionsAdapter.add(previousHotel);
         }
+        previousHotel = hotel;
         attractionsAdapter.remove(hotel);
         attractionsAdapter.notifyDataSetChanged();
     }

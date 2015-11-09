@@ -160,7 +160,7 @@ public class ItineraryFragment extends ListFragment {
         itinerary = optimalRouteFinder.findRoute();
         itineraryAdapter.clear();
         itineraryAdapter.add(new ItineraryItem("Start from " + hotel,
-                "Total cost: " + optimalRouteFinder.candidateSolution.getTotalCost() + ", total time: " + optimalRouteFinder.candidateSolution.total_time));
+                "Total cost: " + optimalRouteFinder.candidateSolution.getTotalCost() + ", total time: " + optimalRouteFinder.candidateSolution.total_time + " minutes"));
         for (ItineraryItem item :
                 itinerary) {
             itineraryAdapter.add(item);
