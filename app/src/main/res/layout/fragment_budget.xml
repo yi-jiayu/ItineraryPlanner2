@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mycompany.itineraryplanner2.BudgetFragment" >
+    tools:context="com.mycompany.itineraryplanner2.BudgetFragment">
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:ems="10"
         android:id="@+id/editText"
         android:hint="Budget"
-        android:imeOptions="actionNext"
+        android:imeOptions="actionDone|actionNext"
         android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
@@ -48,8 +48,9 @@
         android:layout_below="@+id/view"
         android:layout_toEndOf="@+id/view2"
         android:hint="Hotel location"
-        android:imeOptions="actionGo"
-        android:singleLine="true" />
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:inputType="textCapWords" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -67,7 +68,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="start"
         android:id="@+id/radioGroup"
         android:layout_alignParentStart="true"
@@ -80,7 +81,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exact"
+            android:text="Approximate (Faster)"
             android:id="@+id/radioButton"
             android:checked="false"
             android:layout_weight="1" />
@@ -88,7 +89,7 @@
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Approximate"
+            android:text="Exact (Slower)"
             android:id="@+id/radioButton2"
             android:checked="false"
             android:layout_weight="1" />

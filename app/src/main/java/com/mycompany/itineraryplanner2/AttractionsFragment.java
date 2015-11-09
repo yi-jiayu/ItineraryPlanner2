@@ -23,26 +23,15 @@ import java.util.HashSet;
  */
 public class AttractionsFragment extends ListFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
-    HashSet<String> checkedAttractions = new HashSet<>();
+    private String previousHotel;
+    private ArrayList<String> attractions;
+    private HashSet<String> checkedAttractions;
+    private ArrayAdapter<String> attractionsAdapter;
 
-    // TODO: Rename and change types of parameters
-    public static AttractionsFragment newInstance(String param1, String param2) {
+    public static AttractionsFragment newInstance() {
         AttractionsFragment fragment = new AttractionsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -69,14 +58,12 @@ public class AttractionsFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        attractions = new ArrayList<>(Data.attractions);
+        checkedAttractions = new HashSet<>();
 
-        setListAdapter(new ArrayAdapter<>(getActivity(),
-                R.layout.attraction, R.id.text1, Data.attractions));
-//                R.layout.attraction_card, R.id.text1, Data.attractions));
+        attractionsAdapter = new ArrayAdapter<>(getActivity(),
+                R.layout.attraction, R.id.text1, attractions);
+        setListAdapter(attractionsAdapter);
 
     }
 
@@ -116,6 +103,15 @@ public class AttractionsFragment extends ListFragment {
             // fragment is attached to one) that an item has been selected.
             mListener.onAttractionsSelected(new ArrayList<>(checkedAttractions));
         }
+    }
+
+    public void updateHotel(String hotel) {
+        Log.i("AttractionsFragment", "Updating hotel");
+        if (previousHotel != null) {
+            attractionsAdapter.add(previousHotel);
+        }
+        attractionsAdapter.remove(hotel);
+        attractionsAdapter.notifyDataSetChanged();
     }
 
     /**

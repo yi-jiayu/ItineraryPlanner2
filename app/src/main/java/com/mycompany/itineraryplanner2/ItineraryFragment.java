@@ -20,27 +20,19 @@ import java.util.ArrayList;
  */
 public class ItineraryFragment extends ListFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
-    int budget;
-    boolean exhaustiveMode;
-    ArrayList<ItineraryItem> itinerary;
+    private ArrayList<ItineraryItem> itinerary;
+    private ItineraryAdapter itineraryAdapter;
 
-    // TODO: Rename and change types of parameters
-    public static ItineraryFragment newInstance(int budget, ArrayList<String> toVisit, boolean exhaustiveMode) {
+    private int budget;
+    private String hotel;
+    private ArrayList<String> destinations;
+    private boolean exhaustiveMode;
+
+
+    public static ItineraryFragment newInstance() {
         ItineraryFragment fragment = new ItineraryFragment();
-        Bundle args = new Bundle();
-        args.putInt("budget", budget);
-        args.putStringArrayList("toVisit", toVisit);
-        args.putBoolean("exhaustiveMode", exhaustiveMode);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -53,23 +45,12 @@ public class ItineraryFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            budget = getArguments().getInt("budget");
-            Log.i("budget", String.valueOf(budget));
-            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
-            Log.i("exhaustiveMode", String.valueOf(exhaustiveMode));
-            ArrayList<String> attractionsToVisit = getArguments().getStringArrayList("toVisit");
-            Log.i("Attractions to visit:", attractionsToVisit.toString());
-            OptimalRouteFinder optimalRouteFinder = new OptimalRouteFinder(budget, "Resorts World Sentosa", attractionsToVisit);
-            if (exhaustiveMode) {
-                itinerary = optimalRouteFinder.findOptimalRoute();
-            } else {
-                itinerary = optimalRouteFinder.findApproximateRoute();
-            }
-            setListAdapter(new ItineraryAdapter(getActivity(), itinerary));
-        }
+        super.onCreate(savedInstanceState);
+        destinations = new ArrayList<>();
+        itinerary = new ArrayList<>();
+        itineraryAdapter = new ItineraryAdapter(getActivity(), itinerary);
+        setListAdapter(itineraryAdapter);
 
     }
 
@@ -84,6 +65,7 @@ public class ItineraryFragment extends ListFragment {
 //        params.setMargins(0, 0, 0, 1);
 //        listView.setLayoutParams(params);
 //        listView.requestLayout();
+        listView.setSelector(android.R.color.transparent);
         listView.setDivider(null);
         listView.setDividerHeight(0);
         return listLayout;
@@ -128,8 +110,46 @@ public class ItineraryFragment extends ListFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+
+    }
+
+    public void updateItinerary(int budget) {
+        Log.i("ItineraryFragment", "Budget updated");
+        this.budget = budget;
+        updateItinerary();
+    }
+
+    public void updateItinerary(String hotel) {
+        Log.i("Itinerary Fragment", "Hotel updated");
+        this.hotel = hotel;
+        updateItinerary();
+    }
+
+    public void updateItinerary(boolean exhaustiveMode) {
+        Log.i("ItineraryFragment", "Search mode updated");
+        this.exhaustiveMode = exhaustiveMode;
+        updateItinerary();
+    }
+
+    public void updateItinerary(ArrayList<String> destinations) {
+        Log.i("ItineraryFragment", "Destinations updated");
+        this.destinations = destinations;
+        updateItinerary();
+    }
+
+    public void updateItinerary() {
+        if (hotel == null || destinations.isEmpty()) {
+            return;
+        }
+
+        Log.i("ItineraryFragment", "Refreshing itinerary");
+        itinerary = new OptimalRouteFinder(budget, hotel, destinations, exhaustiveMode).findRoute();
+        itineraryAdapter.clear();
+        for (ItineraryItem item :
+                itinerary) {
+            itineraryAdapter.add(item);
+        }
+        itineraryAdapter.notifyDataSetChanged();
     }
 
     class OptimalRouteFinder {
@@ -139,40 +159,29 @@ public class ItineraryFragment extends ListFragment {
             int total_cost = Integer.MAX_VALUE;
         }
 
-        boolean approximateMode = false;
+        boolean exhaustiveMode;
         int budget;
         String hotel;
         ArrayList<String> destinations;
         CandidateSolution candidateSolution;
 
-        public OptimalRouteFinder(int budget, String hotel, ArrayList<String> destinations) {
+        public OptimalRouteFinder(int budget, String hotel, ArrayList<String> destinations, boolean exhaustiveMode) {
             this.budget = budget;
             this.hotel = hotel;
             this.destinations = destinations;
+            this.exhaustiveMode = exhaustiveMode;
             candidateSolution = new CandidateSolution();
         }
 
-        ArrayList<ItineraryItem> findApproximateRoute() {
+        ArrayList<ItineraryItem> findRoute() {
+            // TODO: can be removed
             if (destinations.isEmpty()) {
                 return new ArrayList<>();
             }
-            this.approximateMode = true;
             try {
                 tracePath(hotel, 0, 0, new ArrayList<>(destinations), new ArrayList<ItineraryItem>());
             } catch (InterruptedException e) {
                 return candidateSolution.pathTaken;
-            }
-            return candidateSolution.pathTaken; // this will never happen
-        }
-
-        ArrayList<ItineraryItem> findOptimalRoute() {
-            if (destinations.isEmpty()) {
-                return new ArrayList<>();
-            }
-            try {
-                tracePath(hotel, 0, 0, new ArrayList<>(destinations), new ArrayList<ItineraryItem>());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
             return candidateSolution.pathTaken;
         }
@@ -206,7 +215,7 @@ public class ItineraryFragment extends ListFragment {
                             candidateSolution.total_time = finalTiming;
                             pathTaken.add(new ItineraryItem(transportMode, hotel, cost, time));
                             candidateSolution.pathTaken = pathTaken;
-                            if (approximateMode) {
+                            if (!exhaustiveMode) {
                                 throw new InterruptedException();
                             }
                             Log.i("FinalPathTaken", candidateSolution.pathTaken.toString());

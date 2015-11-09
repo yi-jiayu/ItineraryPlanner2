@@ -10,6 +10,6 @@ public class Data {
     static ArrayList<String> attractions = new ArrayList<>();
 
     static {
-        Collections.addAll(attractions, "Marina Bay Sands", "Singapore Flyer", "Vivo City", "Buddha Tooth Relic Temple", "Zoo");
+        Collections.addAll(attractions, "Marina Bay Sands", "Singapore Flyer", "Vivo City", "Buddha Tooth Relic Temple", "Resorts World Sentosa", "Zoo");
     }
 }

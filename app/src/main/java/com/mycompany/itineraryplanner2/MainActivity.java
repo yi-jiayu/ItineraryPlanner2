@@ -1,6 +1,5 @@
 package com.mycompany.itineraryplanner2;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -42,6 +40,10 @@ public class MainActivity
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    private BudgetFragment budgetFragment;
+    private AttractionsFragment attractionsFragment;
+    private ItineraryFragment itineraryFragment;
 
     ArrayList<String> checkedAttractions = new ArrayList<>();
     int budget;
@@ -107,43 +109,36 @@ public class MainActivity
     }
 
     @Override
-    public void onBudgetUpdated(int budget, String hotel, boolean exhaustiveMode) {
-//        Toast.makeText(this, String.valueOf(budget), Toast.LENGTH_SHORT).show();
+    public void onAttractionsSelected(ArrayList<String> selectedAttractions) {
+        if (itineraryFragment != null) {
+            itineraryFragment.updateItinerary(selectedAttractions);
+        }
+    }
 
-        this.budget = budget;
-        this.hotel = hotel;
-        this.itineraryExhaustiveEnumeration = exhaustiveMode;
+    @Override
+    public void onBudgetUpdated(int budget) {
+        if (itineraryFragment != null) {
+            itineraryFragment.updateItinerary(budget);
+        }
+    }
 
-        mSectionsPagerAdapter.notifyDataSetChanged();
-
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    @Override
+    public void onHotelUpdated(String hotel) {
+        Log.i("MainActivity", "Hotel updated!");
+        if (attractionsFragment != null) {
+            attractionsFragment.updateHotel(hotel);
+        }
+        if (itineraryFragment != null) {
+            itineraryFragment.updateItinerary(hotel);
         }
 
-        ((ViewPager) findViewById(R.id.container)).setCurrentItem(1);
     }
 
     @Override
-    public void onAttractionsSelected(ArrayList<String> selectedAttractions) {
-        this.checkedAttractions = selectedAttractions;
-
-        mSectionsPagerAdapter.notifyDataSetChanged();
-
-//        String checkedAttractionsString = "";
-//        for (String selectedAttraction :
-//                selectedAttractions) {
-//            checkedAttractionsString += " " + selectedAttraction;
-//        }
-
-//        Toast.makeText(this, checkedAttractionsString, Toast.LENGTH_SHORT).show();
-//        Log.i("AttractionsFragment", checkedAttractionsString);
-    }
-
-    @Override
-    public void onFragmentInteraction(String id) {
-
+    public void onSearchModeUpdated(boolean exhaustiveMode) {
+        if (itineraryFragment != null) {
+            itineraryFragment.updateItinerary(exhaustiveMode);
+        }
     }
 
 
@@ -161,31 +156,39 @@ public class MainActivity
         }
 
         @Override
-        public int getItemPosition(Object object) {
-            if (object instanceof ItineraryFragment) {
-                mFragmentManager.beginTransaction().remove((Fragment) object).commit();
-                Log.i("MyActivity", "Destroying ItineraryFragment");
-                return POSITION_NONE;
-            } else {
-                return super.getItemPosition(object);
-            }
-        }
-
-        @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             switch (position) {
                 case 0:
-                    return BudgetFragment.newInstance("", "");
+                    return BudgetFragment.newInstance();
                 case 1:
-                    return AttractionsFragment.newInstance("", "");
+                    return AttractionsFragment.newInstance();
                 case 2:
-                    Log.i("MyActivity", "getItem is called for ItineraryFragment");
-                    return ItineraryFragment.newInstance(budget, checkedAttractions, itineraryExhaustiveEnumeration);
+                    return ItineraryFragment.newInstance();
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
             }
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment createdFragment = (Fragment) super.instantiateItem(container, position);
+            // save the appropriate reference depending on position
+            switch (position) {
+                case 0:
+                    budgetFragment = (BudgetFragment) createdFragment;
+                    Log.i("instantiateItem", "Created BudgetFragment");
+                    break;
+                case 1:
+                    attractionsFragment = (AttractionsFragment) createdFragment;
+                    Log.i("instantiateItem", "Created AttractionsFragment");
+                    break;
+                case 2:
+                    itineraryFragment = (ItineraryFragment) createdFragment;
+                    Log.i("instantiateItem", "Created ItineraryFragment");
+            }
+            return createdFragment;
         }
 
         @Override
