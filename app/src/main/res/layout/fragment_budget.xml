@@ -4,7 +4,7 @@
     tools:context="com.mycompany.itineraryplanner2.itineraryplanner.BudgetFragment">
 
     <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/view"
         android:layout_alignParentLeft="true"
@@ -24,7 +24,8 @@
         android:id="@+id/editText"
         android:hint="Budget"
         android:imeOptions="actionDone"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:gravity="right" />
 
         </android.support.design.widget.TextInputLayout>
 

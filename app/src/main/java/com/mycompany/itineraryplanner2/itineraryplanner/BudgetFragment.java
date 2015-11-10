@@ -3,6 +3,8 @@ package com.mycompany.itineraryplanner2.itineraryplanner;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -79,6 +81,36 @@ public class BudgetFragment extends Fragment {
             }
         });
 
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() < 3) {
+                    // do nothing
+                } else {
+                    String str = s.toString();
+                    Log.i("TextWatcher", "Before replace: " + str);
+                    str = str.replace(".", "");
+                    Log.i("TextWatcher", "Before adding dot: " + str);
+                    str = str.substring(0, str.length() - 2) + "." + str.substring(str.length()-2, str.length());
+                    Log.i("TextWatcher", "Final string: " + str);
+                    editText.removeTextChangedListener(this);
+                    editText.setText(str);
+                    editText.setSelection(str.length());
+                    editText.addTextChangedListener(this);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -90,6 +122,7 @@ public class BudgetFragment extends Fragment {
                     if (string.isEmpty()) {
                         budget = 0;
                     } else {
+                        string = string.replace(".", "");
                         budget = Integer.parseInt(string);
                     }
                     mListener.onBudgetUpdated(budget);
