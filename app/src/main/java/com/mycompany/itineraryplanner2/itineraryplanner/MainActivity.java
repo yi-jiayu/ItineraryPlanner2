@@ -52,12 +52,17 @@ public class MainActivity
     private int budget;
     private String hotel;
     private boolean itineraryExhaustiveEnumeration;
-    ArrayList<String> checkedAttractions = new ArrayList<>();
-    ArrayList<String> itineraryDestinations;
+    private ArrayList<String> checkedAttractions;
+    private ArrayList<String> itineraryDestinations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+
+        }
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
