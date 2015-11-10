@@ -3,6 +3,7 @@ package com.mycompany.itineraryplanner2.itineraryplanner;
 public class ItineraryItem {
     String directions;
     String details;
+    String destination;
 
     ItineraryItem(String heading, String subheading) {
         directions = heading;
@@ -10,6 +11,7 @@ public class ItineraryItem {
     }
 
     ItineraryItem(TransportMode transportMode, String destination, int cost, int time) {
+        this.destination = destination;
         details = "$" + cost / 100 + "." + cost % 100 + ", " + time + " minutes";
         switch (transportMode) {
             case TAXI:

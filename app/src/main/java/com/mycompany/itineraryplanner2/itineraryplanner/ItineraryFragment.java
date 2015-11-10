@@ -31,6 +31,7 @@ public class ItineraryFragment extends ListFragment {
     private String hotel;
     private ArrayList<String> destinations;
     private boolean exhaustiveMode;
+    private ArrayList<ItineraryItem> route;
 
 
     public static ItineraryFragment newInstance() {
@@ -123,7 +124,7 @@ public class ItineraryFragment extends ListFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-
+        void getItineraryDestinations(ArrayList<String> itineraryDestinations);
     }
 
     public void updateItinerary(int budget) {
@@ -164,15 +165,16 @@ public class ItineraryFragment extends ListFragment {
 
         Log.i("ItineraryFragment", "Refreshing itinerary");
         OptimalRouteFinder optimalRouteFinder = new OptimalRouteFinder(budget, hotel, destinations, exhaustiveMode);
-        ArrayList<ItineraryItem> itinerary = optimalRouteFinder.findRoute();
+        route = optimalRouteFinder.findRoute();
+        ArrayList<String> itineraryStops = new ArrayList<>();
+        for (ItineraryItem item : route) {
+            itineraryStops.add(item.destination);
+        }
+        mListener.getItineraryDestinations(itineraryStops);
         itineraryAdapter.clear();
-        itinerary.add(0, new ItineraryItem("Start from " + hotel,
+        route.add(0, new ItineraryItem("Start from " + hotel,
                 "Total cost: " + optimalRouteFinder.candidateSolution.getTotalCost() + ", total time: " + optimalRouteFinder.candidateSolution.total_time + " minutes"));
-//        for (ItineraryItem item :
-//                itinerary) {
-//            itineraryAdapter.add(item);
-//        }
-        itineraryAdapter.addAll(itinerary);
+        itineraryAdapter.addAll(route);
         itineraryAdapter.notifyDataSetChanged();
     }
 

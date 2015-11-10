@@ -15,21 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.mycompany.itineraryplanner2.R;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 public class MainActivity
@@ -63,6 +53,7 @@ public class MainActivity
     private String hotel;
     private boolean itineraryExhaustiveEnumeration;
     ArrayList<String> checkedAttractions = new ArrayList<>();
+    ArrayList<String> itineraryDestinations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +84,8 @@ public class MainActivity
 //        });
 
         // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://6f1c4b4f4f62ca7e204cacaf2c107ed51fefe0ec.googledrive.com/secure/AH8CU7H_R5MXnmlTV-CzLx3Kclfbl7AobLcdr-shaKTFi92I1kqml5at92HCcLtwplPuJeLdw8m5gN-_8sT4EsI_qsAE5jXqNDxLCxNfuNQ5qx71fmOi3gVEfPCEWkU91iPc5l240SKxJyhH0M0wyTqi7ZsplfTsO7nyI98xey-0vDuC255baivHSJlFDJlMrLjiNa5jDK6FmFsltG8b_qG0ny9kQefhDkrWf68tKvEXbYy4Oub3Y7QcjXaWlTc0_29gyPiuOiaHWtRMrMAMSGu31mo6SaIeymgNXKQJmE_b2bd8e3yZpoLOlEAUdaxTafDGO3Sa6o1xjFqCLqXUqOR31WaY_LHQGwoM83KOMP4YXxwjCs2BKSAE1lw8vA2b_NC6yM7XWuvzheJm-55YoT8IM1UzgV709wqnUZBkTEeNiBszDAANTUw-Yz8dzadsB63yq_YGBGzYRDmv_E9otrtrGorKl5hrbdGg_w3zxIvjDLSqXMN_ilE7lbHodQTkLeFEIBOn7-uxebai3fTD9f5Ko4gk-R8vmEvoXWaM8EIcA_du0kfmiCPhBb_xoLJiJoxNkfAkDwiZ/host/0B26Apu7abq-hUlo4ZmtVcVFBZUk";
+/*        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="https://api.myjson.com/bins/45ovu";
 
 // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -130,13 +121,13 @@ public class MainActivity
             }
         });
 // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        queue.add(stringRequest);*/
 
-//        try (InputStream fileInputStream = getResources().openRawResource(R.raw.attractions)) {
-//            Routes.generateRoutes(fileInputStream);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try (InputStream fileInputStream = getResources().openRawResource(R.raw.attractions)) {
+            Routes.generateRoutes(fileInputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -200,6 +191,11 @@ public class MainActivity
         if (itineraryFragment != null) {
             itineraryFragment.updateItinerary(exhaustiveMode);
         }
+    }
+
+    @Override
+    public void getItineraryDestinations(ArrayList<String> itineraryDestinations) {
+        this.itineraryDestinations = itineraryDestinations;
     }
 
 
