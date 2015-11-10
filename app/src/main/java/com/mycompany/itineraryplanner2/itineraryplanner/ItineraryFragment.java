@@ -1,6 +1,7 @@
 package com.mycompany.itineraryplanner2.itineraryplanner;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.mycompany.itineraryplanner2.R;
 
@@ -32,6 +34,8 @@ public class ItineraryFragment extends ListFragment {
     private ArrayList<String> destinations;
     private boolean exhaustiveMode;
     private ArrayList<ItineraryItem> route;
+    private View listLayout;
+    private ListView listView;
 
 
     public static ItineraryFragment newInstance() {
@@ -70,8 +74,8 @@ public class ItineraryFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View listLayout = inflater.inflate(R.layout.list_content, container, false);
-        ListView listView = (ListView) listLayout.findViewById(android.R.id.list);
+        listLayout = inflater.inflate(R.layout.list_content, container, false);
+        listView = (ListView) listLayout.findViewById(android.R.id.list);
 //        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 //                FrameLayout.LayoutParams.WRAP_CONTENT,
 //                FrameLayout.LayoutParams.WRAP_CONTENT
@@ -165,17 +169,8 @@ public class ItineraryFragment extends ListFragment {
 
         Log.i("ItineraryFragment", "Refreshing itinerary");
         OptimalRouteFinder optimalRouteFinder = new OptimalRouteFinder(budget, hotel, destinations, exhaustiveMode);
-        route = optimalRouteFinder.findRoute();
-        ArrayList<String> itineraryStops = new ArrayList<>();
-        for (ItineraryItem item : route) {
-            itineraryStops.add(item.destination);
-        }
-        mListener.getItineraryDestinations(itineraryStops);
-        itineraryAdapter.clear();
-        route.add(0, new ItineraryItem("Start from " + hotel,
-                "Total cost: " + optimalRouteFinder.candidateSolution.getTotalCost() + ", total time: " + optimalRouteFinder.candidateSolution.total_time + " minutes"));
-        itineraryAdapter.addAll(route);
-        itineraryAdapter.notifyDataSetChanged();
+        BackgroundRouteFinder backgroundRouteFinder = new BackgroundRouteFinder();
+        backgroundRouteFinder.execute(optimalRouteFinder);
     }
 
     class OptimalRouteFinder {
@@ -267,6 +262,42 @@ public class ItineraryFragment extends ListFragment {
                     }
                 }
             }
+        }
+    }
+
+    private class BackgroundRouteFinder extends AsyncTask<OptimalRouteFinder, Void, OptimalRouteFinder> {
+
+        private ProgressBar progressBar;
+
+        @Override
+        protected OptimalRouteFinder doInBackground(OptimalRouteFinder... params) {
+            OptimalRouteFinder routeFinder = params[0];
+            routeFinder.findRoute();
+            return routeFinder;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressBar = ((ProgressBar) listLayout.findViewById(R.id.progressBar));
+            listView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(OptimalRouteFinder optimalRouteFinder) {
+            route = optimalRouteFinder.findRoute();
+            ArrayList<String> itineraryStops = new ArrayList<>();
+            for (ItineraryItem item : route) {
+                itineraryStops.add(item.destination);
+            }
+            mListener.getItineraryDestinations(itineraryStops);
+            itineraryAdapter.clear();
+            route.add(0, new ItineraryItem("Start from " + hotel,
+                    "Total cost: " + optimalRouteFinder.candidateSolution.getTotalCost() + ", total time: " + optimalRouteFinder.candidateSolution.total_time + " minutes"));
+            itineraryAdapter.addAll(route);
+            itineraryAdapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
         }
     }
 }
