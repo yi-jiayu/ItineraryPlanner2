@@ -33,13 +33,13 @@ public class ItineraryFragment extends ListFragment {
     private boolean exhaustiveMode;
 
 
-    public static ItineraryFragment newInstance(int budget, String hotel, boolean exhaustiveMode) {
+    public static ItineraryFragment newInstance() {
         ItineraryFragment fragment = new ItineraryFragment();
-        Bundle args = new Bundle();
-        args.putInt("budget", budget);
-        args.putString("hotel", hotel);
-        args.putBoolean("exhaustiveMode", exhaustiveMode);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putInt("budget", budget);
+//        args.putString("hotel", hotel);
+//        args.putBoolean("exhaustiveMode", exhaustiveMode);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -53,11 +53,11 @@ public class ItineraryFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        if (getArguments() != null) {
-            budget = getArguments().getInt("budget");
-            hotel = getArguments().getString("hotel");
-            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
-        }
+//        if (getArguments() != null) {
+//            budget = getArguments().getInt("budget");
+//            hotel = getArguments().getString("hotel");
+//            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
+//        }
 
         super.onCreate(savedInstanceState);
         destinations = new ArrayList<>();
@@ -135,6 +135,7 @@ public class ItineraryFragment extends ListFragment {
     public void updateItinerary(String hotel) {
         Log.i("Itinerary Fragment", "Hotel updated");
         this.hotel = hotel;
+        this.destinations.remove(hotel);
         updateItinerary();
     }
 
@@ -151,20 +152,27 @@ public class ItineraryFragment extends ListFragment {
     }
 
     public void updateItinerary() {
-        if (hotel == null || destinations.isEmpty()) {
+        if (hotel == null) {
+            return;
+        }
+
+        if (destinations.isEmpty()) {
+            itineraryAdapter.clear();
+            itineraryAdapter.notifyDataSetChanged();
             return;
         }
 
         Log.i("ItineraryFragment", "Refreshing itinerary");
         OptimalRouteFinder optimalRouteFinder = new OptimalRouteFinder(budget, hotel, destinations, exhaustiveMode);
-        itinerary = optimalRouteFinder.findRoute();
+        ArrayList<ItineraryItem> itinerary = optimalRouteFinder.findRoute();
         itineraryAdapter.clear();
-        itineraryAdapter.add(new ItineraryItem("Start from " + hotel,
+        itinerary.add(0, new ItineraryItem("Start from " + hotel,
                 "Total cost: " + optimalRouteFinder.candidateSolution.getTotalCost() + ", total time: " + optimalRouteFinder.candidateSolution.total_time + " minutes"));
-        for (ItineraryItem item :
-                itinerary) {
-            itineraryAdapter.add(item);
-        }
+//        for (ItineraryItem item :
+//                itinerary) {
+//            itineraryAdapter.add(item);
+//        }
+        itineraryAdapter.addAll(itinerary);
         itineraryAdapter.notifyDataSetChanged();
     }
 
@@ -195,6 +203,7 @@ public class ItineraryFragment extends ListFragment {
 
         ArrayList<ItineraryItem> findRoute() {
             Log.i("findRoute", "Starting from " + hotel + ", exhaustiveMode: " + String.valueOf(exhaustiveMode));
+            Log.i("findRoute", "Destinations: " + destinations.toString());
             try {
                 tracePath(hotel, 0, 0, new ArrayList<>(destinations), new ArrayList<ItineraryItem>());
             } catch (InterruptedException e) {
@@ -219,6 +228,7 @@ public class ItineraryFragment extends ListFragment {
 //            Log.i("remainingDestinations", String.valueOf(remainingDestinations.isEmpty()));
             if (remainingDestinations.isEmpty()) {
                 for (TransportMode transportMode : TransportMode.values()) {
+                    ArrayList<ItineraryItem> finalPathTaken = new ArrayList<>(pathTaken);
                     Log.i("tracePath", String.format("%sFinished visiting %s, now returning to hotel by %s", new String(new char[recursionDepth * 4]).replace("\0", " "), pathTaken.toString(), transportMode.toString()));
                     int cost = Routes.getCost(transportMode, currentLocation, hotel);
                     int finalCost = currentCost + cost;
@@ -228,8 +238,8 @@ public class ItineraryFragment extends ListFragment {
                         if (finalTiming < candidateSolution.total_time) {
                             candidateSolution.total_cost = finalCost;
                             candidateSolution.total_time = finalTiming;
-                            pathTaken.add(new ItineraryItem(transportMode, hotel, cost, time, true));
-                            candidateSolution.pathTaken = pathTaken;
+                            finalPathTaken.add(new ItineraryItem(transportMode, hotel, cost, time, true));
+                            candidateSolution.pathTaken = finalPathTaken;
                             if (!exhaustiveMode) {
                                 throw new InterruptedException();
                             }

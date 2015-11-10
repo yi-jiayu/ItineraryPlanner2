@@ -31,6 +31,7 @@ public class AttractionsFragment extends ListFragment {
     private ArrayList<String> attractions;
     private HashSet<String> checkedAttractions;
     private ArrayAdapter<String> attractionsAdapter;
+    private ListView listView;
 
     public static AttractionsFragment newInstance() {
         AttractionsFragment fragment = new AttractionsFragment();
@@ -47,7 +48,7 @@ public class AttractionsFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View listLayout = inflater.inflate(android.R.layout.list_content, container, false);
-        ListView listView = (ListView) listLayout.findViewById(android.R.id.list);
+        listView = (ListView) listLayout.findViewById(android.R.id.list);
 //        listView.setPadding(0, 8, 0, 0);
 //        ((FrameLayout) listView.getParent()).setPadding(0, 8, 0, 0);
         listView.setSelector(android.R.color.transparent);
@@ -88,6 +89,12 @@ public class AttractionsFragment extends ListFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i("AttractionsFragment", "View destroyed");
+    }
+
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Log.i("AttractionsFragment", "List item click");
 
@@ -109,12 +116,59 @@ public class AttractionsFragment extends ListFragment {
 
     public void updateHotel(String hotel) {
         Log.i("AttractionsFragment", "Updating hotel");
-        if (previousHotel != null) {
-            attractionsAdapter.add(previousHotel);
+//        CheckBox checkbox = (CheckBox) listView.getChildAt(attractionsAdapter.getPosition(hotel)).findViewById(R.id.checkBox);
+//        if (checkbox.isChecked()) {
+//            checkbox.toggle();
+//            checkedAttractions.remove(hotel);
+//        }
+//        if (previousHotel != null) {
+//            attractionsAdapter.add(previousHotel);
+//        }
+//        previousHotel = hotel;
+//        attractionsAdapter.remove(hotel);
+//        attractionsAdapter.notifyDataSetChanged();
+
+//        try {
+//            CheckBox checkbox = ((CheckBox) listView.getChildAt(attractionsAdapter.getPosition(hotel)).findViewById(R.id.checkBox));
+//            if (checkbox.isChecked()) {
+//                checkbox.toggle();
+//            }
+//        } catch (Exception e) {
+//            // doesn't matter
+//        }
+
+        checkedAttractions.clear();
+        mListener.onAttractionsSelected(new ArrayList<>(checkedAttractions));
+        attractions = new ArrayList<>(Data.attractions);
+        attractions.remove(hotel);
+        checkedAttractions.remove(hotel);
+        attractionsAdapter.clear();
+//        listView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                attractionsAdapter.notifyDataSetChanged();
+//            }
+//        });
+        listView.invalidateViews();
+        attractionsAdapter.addAll(attractions);
+        resetCheckboxes();
+//        listView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                attractionsAdapter.notifyDataSetChanged();
+//            }
+//        });
+
+    }
+
+    private void resetCheckboxes() {
+        for (int i = 0; i <= listView.getLastVisiblePosition() - listView.getFirstVisiblePosition(); i++) {
+            CheckBox checkBox = ((CheckBox) listView.getChildAt(i).findViewById(R.id.checkBox));
+            if (checkBox.isChecked()) {
+                checkBox.toggle();
+            }
         }
-        previousHotel = hotel;
-        attractionsAdapter.remove(hotel);
-        attractionsAdapter.notifyDataSetChanged();
+
     }
 
     /**

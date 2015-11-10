@@ -28,7 +28,7 @@ import com.mycompany.itineraryplanner2.R;
  * Use the {@link BudgetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BudgetFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class BudgetFragment extends Fragment {
     private static final String[] HOTELS = {
             "Marina Bay Sands", "Resorts World Sentosa", "Singapore Flyer", "Vivo City", "Buddha Tooth Relic Temple", "Zoo"
     };
@@ -66,7 +66,18 @@ public class BudgetFragment extends Fragment implements AdapterView.OnItemSelect
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Data.attractions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+
+        spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mListener.onHotelUpdated((String) parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -74,7 +85,13 @@ public class BudgetFragment extends Fragment implements AdapterView.OnItemSelect
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     Log.i("BudgetFragment", "Budget updated");
-                    int budget = Integer.parseInt(editText.getText().toString());
+                    String string = editText.getText().toString();
+                    int budget;
+                    if (string.isEmpty()) {
+                        budget = 0;
+                    } else {
+                        budget = Integer.parseInt(string);
+                    }
                     mListener.onBudgetUpdated(budget);
 //                    handled = true;
                 }
@@ -122,19 +139,15 @@ public class BudgetFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i("BudgetFragment", "View destroyed");
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mListener.onHotelUpdated((String) parent.getItemAtPosition(position));
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     /**

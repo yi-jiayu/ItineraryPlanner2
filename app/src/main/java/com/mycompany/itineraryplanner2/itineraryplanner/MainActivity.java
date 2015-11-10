@@ -47,10 +47,12 @@ public class MainActivity
     private AttractionsFragment attractionsFragment;
     private ItineraryFragment itineraryFragment;
 
-    ArrayList<String> checkedAttractions = new ArrayList<>();
+
+    // state variables
     private int budget;
     private String hotel;
     private boolean itineraryExhaustiveEnumeration;
+    ArrayList<String> checkedAttractions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class MainActivity
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -172,7 +175,7 @@ public class MainActivity
                 case 1:
                     return AttractionsFragment.newInstance();
                 case 2:
-                    return ItineraryFragment.newInstance(budget, hotel, itineraryExhaustiveEnumeration);
+                    return ItineraryFragment.newInstance();
                 default:
                     // Return a PlaceholderFragment (defined as a static inner class below).
                     return PlaceholderFragment.newInstance(position + 1);
