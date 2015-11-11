@@ -198,16 +198,14 @@ public class ItineraryFragment extends ListFragment {
             candidateSolution = new CandidateSolution();
         }
 
-        ArrayList<ItineraryItem> findRoute() {
+        void findRoute() {
             Log.i("findRoute", "Starting from " + hotel + ", exhaustiveMode: " + String.valueOf(exhaustiveMode));
             Log.i("findRoute", "Destinations: " + destinations.toString());
             try {
                 tracePath(hotel, 0, 0, new ArrayList<>(destinations), new ArrayList<ItineraryItem>());
             } catch (InterruptedException e) {
                 Log.i("findRoute", "First optimal solution found.");
-                return candidateSolution.pathTaken;
             }
-            return candidateSolution.pathTaken;
         }
 
         void tracePath(String currentLocation, int currentTiming, int currentCost,
@@ -273,6 +271,14 @@ public class ItineraryFragment extends ListFragment {
         protected OptimalRouteFinder doInBackground(OptimalRouteFinder... params) {
             OptimalRouteFinder routeFinder = params[0];
             routeFinder.findRoute();
+            route = routeFinder.candidateSolution.pathTaken;
+            ArrayList<String> itineraryStops = new ArrayList<>();
+            for (ItineraryItem item : route) {
+                itineraryStops.add(item.destination);
+            }
+            mListener.getItineraryDestinations(itineraryStops);
+            route.add(0, new ItineraryItem("Start from " + hotel,
+                    "Total cost: " + routeFinder.candidateSolution.getTotalCost() + ", total time: " + routeFinder.candidateSolution.total_time + " minutes"));
             return routeFinder;
         }
 
@@ -285,15 +291,7 @@ public class ItineraryFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(OptimalRouteFinder optimalRouteFinder) {
-            route = optimalRouteFinder.findRoute();
-            ArrayList<String> itineraryStops = new ArrayList<>();
-            for (ItineraryItem item : route) {
-                itineraryStops.add(item.destination);
-            }
-            mListener.getItineraryDestinations(itineraryStops);
             itineraryAdapter.clear();
-            route.add(0, new ItineraryItem("Start from " + hotel,
-                    "Total cost: " + optimalRouteFinder.candidateSolution.getTotalCost() + ", total time: " + optimalRouteFinder.candidateSolution.total_time + " minutes"));
             itineraryAdapter.addAll(route);
             itineraryAdapter.notifyDataSetChanged();
             progressBar.setVisibility(View.GONE);

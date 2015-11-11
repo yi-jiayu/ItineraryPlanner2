@@ -47,7 +47,6 @@ public class MainActivity
     private AttractionsFragment attractionsFragment;
     private ItineraryFragment itineraryFragment;
 
-
     // state variables
     private int budget;
     private String hotel;
@@ -136,6 +135,11 @@ public class MainActivity
 
     }
 
+    // TODO: Save state here
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -186,7 +190,6 @@ public class MainActivity
         if (itineraryFragment != null) {
             itineraryFragment.updateItinerary(hotel);
         }
-
     }
 
     @Override
