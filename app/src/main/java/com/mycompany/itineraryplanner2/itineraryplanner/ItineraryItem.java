@@ -1,6 +1,9 @@
 package com.mycompany.itineraryplanner2.itineraryplanner;
 
-public class ItineraryItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ItineraryItem implements Parcelable {
     String directions;
     String details;
     String destination;
@@ -47,8 +50,38 @@ public class ItineraryItem {
         }
     }
 
+    protected ItineraryItem(Parcel in) {
+        directions = in.readString();
+        details = in.readString();
+        destination = in.readString();
+    }
+
+    public static final Creator<ItineraryItem> CREATOR = new Creator<ItineraryItem>() {
+        @Override
+        public ItineraryItem createFromParcel(Parcel in) {
+            return new ItineraryItem(in);
+        }
+
+        @Override
+        public ItineraryItem[] newArray(int size) {
+            return new ItineraryItem[size];
+        }
+    };
+
     @Override
     public String toString() {
         return this.directions + " " + this.details;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(directions);
+        dest.writeString(details);
+        dest.writeString(destination);
     }
 }

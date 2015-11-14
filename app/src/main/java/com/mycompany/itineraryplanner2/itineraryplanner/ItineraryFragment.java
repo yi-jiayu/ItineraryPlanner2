@@ -26,7 +26,6 @@ public class ItineraryFragment extends ListFragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<ItineraryItem> itinerary;
     private ItineraryAdapter itineraryAdapter;
 
     private int budget;
@@ -58,16 +57,16 @@ public class ItineraryFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-//        if (getArguments() != null) {
-//            budget = getArguments().getInt("budget");
-//            hotel = getArguments().getString("hotel");
-//            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
-//        }
+        if (getArguments() != null) {
+            budget = getArguments().getInt("budget");
+            hotel = getArguments().getString("hotel");
+            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
+        }
 
         super.onCreate(savedInstanceState);
         destinations = new ArrayList<>();
-        itinerary = new ArrayList<>();
-        itineraryAdapter = new ItineraryAdapter(getActivity(), itinerary);
+        route = new ArrayList<>();
+        itineraryAdapter = new ItineraryAdapter(getActivity(), route);
         setListAdapter(itineraryAdapter);
 
     }
@@ -129,6 +128,8 @@ public class ItineraryFragment extends ListFragment {
      */
     public interface OnFragmentInteractionListener {
         void getItineraryDestinations(ArrayList<String> itineraryDestinations);
+
+        void updateSavedItinerary(ArrayList<ItineraryItem> route);
     }
 
     public void updateItinerary(int budget) {
@@ -279,6 +280,7 @@ public class ItineraryFragment extends ListFragment {
             mListener.getItineraryDestinations(itineraryStops);
             route.add(0, new ItineraryItem("Start from " + hotel,
                     "Total cost: " + routeFinder.candidateSolution.getTotalCost() + ", total time: " + routeFinder.candidateSolution.total_time + " minutes"));
+            mListener.updateSavedItinerary(route);
             return routeFinder;
         }
 
@@ -297,5 +299,12 @@ public class ItineraryFragment extends ListFragment {
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void displaySavedItinerary(ArrayList<ItineraryItem> route) {
+        this.route = route;
+        itineraryAdapter.clear();
+        itineraryAdapter.addAll(route);
+        itineraryAdapter.notifyDataSetChanged();
     }
 }

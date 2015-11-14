@@ -53,13 +53,14 @@ public class MainActivity
     private boolean itineraryExhaustiveEnumeration;
     private ArrayList<String> checkedAttractions;
     private ArrayList<String> itineraryDestinations;
+    private ArrayList<ItineraryItem> savedItinerary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-
+            this.savedItinerary = savedInstanceState.getParcelableArrayList("ITINERARY");
         }
 
         setContentView(R.layout.activity_main);
@@ -142,6 +143,12 @@ public class MainActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("ITINERARY", savedItinerary);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -206,6 +213,11 @@ public class MainActivity
         this.itineraryDestinations = itineraryDestinations;
     }
 
+    @Override
+    public void updateSavedItinerary(ArrayList<ItineraryItem> route) {
+        this.savedItinerary = route;
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -265,11 +277,11 @@ public class MainActivity
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
-                    return "BUDGET";
                 case 1:
-                    return "ATTRACTIONS";
+                    return "BUDGET";
                 case 2:
+                    return "ATTRACTIONS";
+                case 0:
                     return "ITINERARY";
             }
             return null;
