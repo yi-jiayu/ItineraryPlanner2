@@ -39,11 +39,6 @@ public class ItineraryFragment extends ListFragment {
 
     public static ItineraryFragment newInstance() {
         ItineraryFragment fragment = new ItineraryFragment();
-//        Bundle args = new Bundle();
-//        args.putInt("budget", budget);
-//        args.putString("hotel", hotel);
-//        args.putBoolean("exhaustiveMode", exhaustiveMode);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -56,19 +51,11 @@ public class ItineraryFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        if (getArguments() != null) {
-            budget = getArguments().getInt("budget");
-            hotel = getArguments().getString("hotel");
-            exhaustiveMode = getArguments().getBoolean("exhaustiveMode");
-        }
-
         super.onCreate(savedInstanceState);
         destinations = new ArrayList<>();
         route = new ArrayList<>();
         itineraryAdapter = new ItineraryAdapter(getActivity(), route);
         setListAdapter(itineraryAdapter);
-
     }
 
     @Override
@@ -280,7 +267,6 @@ public class ItineraryFragment extends ListFragment {
             mListener.getItineraryDestinations(itineraryStops);
             route.add(0, new ItineraryItem("Start from " + hotel,
                     "Total cost: " + routeFinder.candidateSolution.getTotalCost() + ", total time: " + routeFinder.candidateSolution.total_time + " minutes"));
-            mListener.updateSavedItinerary(route);
             return routeFinder;
         }
 

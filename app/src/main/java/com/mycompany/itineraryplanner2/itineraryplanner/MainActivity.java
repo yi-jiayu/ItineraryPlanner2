@@ -59,10 +59,6 @@ public class MainActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            this.savedItinerary = savedInstanceState.getParcelableArrayList("ITINERARY");
-        }
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -134,18 +130,6 @@ public class MainActivity
             e.printStackTrace();
         }
 
-    }
-
-    // TODO: Save state here
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("ITINERARY", savedItinerary);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -277,11 +261,11 @@ public class MainActivity
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 1:
-                    return "BUDGET";
-                case 2:
-                    return "ATTRACTIONS";
                 case 0:
+                    return "BUDGET";
+                case 1:
+                    return "ATTRACTIONS";
+                case 2:
                     return "ITINERARY";
             }
             return null;
